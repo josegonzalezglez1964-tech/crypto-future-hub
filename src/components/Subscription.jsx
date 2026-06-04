@@ -1,7 +1,26 @@
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
 import { CheckCircle2, Zap } from 'lucide-react';
 
 export default function Subscription() {
+  // Estado para rastrear qué tarjeta está cargando o ya fue adquirida
+  const [loadingTier, setLoadingTier] = useState(null);
+  const [purchasedTiers, setPurchasedTiers] = useState({});
+
+  const handlePurchase = (tierName) => {
+    // Si ya se compró, no hace nada al hacer clic de nuevo
+    if (purchasedTiers[tierName]) return;
+
+    // Activa el estado de carga para esa tarjeta específica
+    setLoadingTier(tierName);
+
+    // Simula una espera de 2 segundos de la firma del Smart Contract o pasarela
+    setTimeout(() => {
+      setLoadingTier(null);
+      setPurchasedTiers(prev => ({ ...prev, [tierName]: true }));
+    }, 2000);
+  };
+
   const tiers = [
     {
       name: 'Retail Alpha',
@@ -34,41 +53,62 @@ export default function Subscription() {
     <section className="py-16 px-6 max-w-7xl mx-auto border-t border-gray-900">
       <div className="text-center mb-12">
         <h2 className="text-2xl md:text-4xl font-bold mb-3 text-white">Modelos de Acceso Premium</h2>
-        <p className="text-gray-400 text-sm max-w-lg mx-auto">Elige cómo consumir la información. Desde micro-pagos automatizados hasta pases en formato NFT corporativos.</p>
+        <p className="text-gray-400 text-sm max-w-lg mx-auto">Elige cómo consumable la información. Desde micro-pagos automatizados hasta pases en formato NFT corporativos.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {tiers.map((tier, idx) => (
-          <div key={idx} className={`bg-[#0b1329] border rounded-xl p-6 relative flex flex-col justify-between transition-transform duration-300 hover:-translate-y-1 ${tier.color}`}>
-            {tier.badge && (
-              <span className="absolute -top-3 right-4 bg-[#00f5ff] text-[#030712] text-[10px] font-mono font-black px-2 py-0.5 rounded">
-                {tier.badge}
-              </span>
-            )}
-            <div>
-              <h3 className="text-xl font-bold text-white font-mono mb-2 flex items-center gap-2">
-                {tier.badge && <Zap className="w-4 h-4 text-[#00f5ff] fill-[#00f5ff]" />}
-                {tier.name}
-              </h3>
-              <p className="text-gray-400 text-xs mb-6 min-h-[32px]">{tier.desc}</p>
-              <div className="mb-6">
-                <span className="text-3xl font-black text-white font-mono">{tier.price}</span>
-                <span className="text-gray-500 text-xs font-mono"> / {tier.period}</span>
+        {tiers.map((tier, idx) => {
+          const isCurrentlyLoading = loadingTier === tier.name;
+          const hasBeenPurchased = purchasedTiers[tier.name];
+
+          return (
+            <div key={idx} className={`bg-[#0b1329] border rounded-xl p-6 relative flex flex-col justify-between transition-transform duration-300 hover:-translate-y-1 ${tier.color}`}>
+              {tier.badge && (
+                <span className="absolute -top-3 right-4 bg-[#00f5ff] text-[#030712] text-[10px] font-mono font-black px-2 py-0.5 rounded">
+                  {tier.badge}
+                </span>
+              )}
+              <div>
+                <h3 className="text-xl font-bold text-white font-mono mb-2 flex items-center gap-2">
+                  {tier.badge && <Zap className="w-4 h-4 text-[#00f5ff] fill-[#00f5ff]" />}
+                  {tier.name}
+                </h3>
+                <p className="text-gray-400 text-xs mb-6 min-h-[32px]">{tier.desc}</p>
+                <div className="mb-6">
+                  <span className="text-3xl font-black text-white font-mono">{tier.price}</span>
+                  <span className="text-gray-500 text-xs font-mono"> / {tier.period}</span>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {tier.features.map((f, i) => (
+                    <li key={i} className="flex items-start gap-2 text-xs text-gray-300">
+                      <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-3 mb-8">
-                {tier.features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-gray-300">
-                    <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
+              
+              <button 
+                onClick={() => handlePurchase(tier.name)}
+                disabled={isCurrentlyLoading || hasBeenPurchased}
+                className={`w-full py-2.5 rounded-lg font-mono text-xs transition-all duration-300 border ${
+                  hasBeenPurchased 
+                    ? "bg-green-500/10 border-green-500 text-green-400 cursor-default"
+                    : isCurrentlyLoading
+                      ? "bg-gray-800 border-gray-600 text-gray-400 cursor-wait animate-pulse"
+                      : "bg-gray-900 border-gray-700 hover:border-gray-500 text-white hover:bg-gray-800"
+                }`}
+              >
+                {hasBeenPurchased 
+                  ? '✓ ACCESO CONCEDIDO' 
+                  : isCurrentlyLoading 
+                    ? 'PROCESANDO FIRMA...' 
+                    : 'ADQUIRIR ACCESO'
+                }
+              </button>
             </div>
-            <button className="w-full py-2.5 rounded-lg bg-gray-900 border border-gray-700 hover:border-gray-500 text-white font-mono text-xs transition-colors">
-              ADQUIRIR ACCESO
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
