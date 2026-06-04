@@ -1,7 +1,7 @@
 import React from 'react';
-import MetricBar from './../components/MetricBar.jsx';
-import Hero from './../components/Hero.jsx';
-import Subscription from './../components/Subscription.jsx';
+import MetricBar from '../components/MetricBar.jsx';
+import Hero from '../components/Hero.jsx';
+import Subscription from '../components/Subscription.jsx';
 
 export default function Home() {
   return (
