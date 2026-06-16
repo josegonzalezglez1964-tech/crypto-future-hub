@@ -1,16 +1,21 @@
 self.__BUILD_MANIFEST = {
   "/": [
-    "static/chunks/2g0ssd--x0sd1.js"
+    "static/chunks/3pvn7clqasl3p.js"
   ],
   "/_error": [
-    "static/chunks/0ks3jbie1qn-h.js"
+    "static/chunks/3-s66lg0-v1m5.js"
   ],
   "/documentacion": [
-    "static/chunks/09fpkwny4s3x0.js"
+    "static/chunks/06zedwh52bqf8.js"
   ],
   "__rewrites": {
     "afterFiles": [],
-    "beforeFiles": [],
+    "beforeFiles": [
+      {
+        "source": "/crypto-future-hub//_next/:path+",
+        "destination": "/crypto-future-hub/_next/:path+"
+      }
+    ],
     "fallback": []
   },
   "sortedPages": [
