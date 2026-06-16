@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: '/crypto-future-hub', // <-- Añade esta línea (¡con la barra delante!)
-  assetPrefix: '/crypto-future-hub/', // <-- Añade esta línea (¡con barras delante y detrás!)
+  basePath: '/crypto-future-hub', 
+  assetPrefix: '/crypto-future-hub/', 
   images: {
     unoptimized: true,
   },
